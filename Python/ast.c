@@ -2303,7 +2303,7 @@ ast_for_atom(struct compiling *c, const node *n)
 {
     /* atom: '(' [yield_expr|testlist_comp] ')' | '[' [testlist_comp] ']'
        | '{' [dictmaker|testlist_comp] '}' | NAME | NUMBER | STRING+
-       | '...' | 'None' | 'True' | 'False'
+       | '...' | 'None' | 'True' | 'False' | 'Maybe'
     */
     node *ch = CHILD(n, 0);
 
@@ -2321,6 +2321,9 @@ ast_for_atom(struct compiling *c, const node *n)
                                 n->n_end_lineno, n->n_end_col_offset, c->c_arena);
             if (!strcmp(s, "False"))
                 return Constant(Py_False, NULL, LINENO(n), n->n_col_offset,
+                                n->n_end_lineno, n->n_end_col_offset, c->c_arena);
+            if (!strcmp(s, "Maybe"))
+                return Constant(Py_Maybe, NULL, LINENO(n), n->n_col_offset,
                                 n->n_end_lineno, n->n_end_col_offset, c->c_arena);
         }
         name = new_identifier(s, c);
